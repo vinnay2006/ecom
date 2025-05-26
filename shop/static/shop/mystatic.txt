@@ -1,0 +1,1 @@
+this is a file that i made in my shop app with static folder and having shop folder and then showing me a text file with the name shop
