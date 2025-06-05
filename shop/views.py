@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from  .models import Product
+from  .models import Product,Contact
 from math import ceil
+
 def index(request):
     products=Product.objects.all()
     print(products)
@@ -23,14 +24,24 @@ def index(request):
 def about(request):
     return render( request,"shop/about.htm")
 def contact(request):
-    return HttpResponse("we are at abouts")
+    if request.method=="POST":
+        print(request)
+        name=request.POST.get('name','')
+        email=request.POST.get('email','')
+        subject=request.POST.get('subject','')
+        message=request.POST.get('message','')
+        print(name,email,subject,message)
+        contact=Contact(name=name,email=email,subject=subject,message=message)
+        contact.save()
+    return render( request,"shop/contact.htm")
 def tracker(request):
-    return HttpResponse("we are at abouts")
+    return render( request,"shop/tracker.htm")
 def search(request):
-    return HttpResponse("we are at abouts")
-def prodView(request):
-    return HttpResponse("we are at abouts")
+    return render( request,"shop/search.htm")
+def prodView(request,myid):
+    product=Product.objects.filter(id=myid)
+    return render( request,"shop/prodView.htm",{'product':product[0]})
 def checkout(request):
-    return HttpResponse("we are at abouts")
+    return render( request,"shop/checkout.htm")
 
 

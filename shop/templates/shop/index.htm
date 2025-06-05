@@ -45,28 +45,22 @@ body .no-padding{
   <!--slideshow begins here-->
  <div class ="container carousel-inner no-padding">
   <div class="carousel-item active">
-  <div class="col-xs-3 col-sm-3 col-md-3">
-  <div class="card" style="width: 18rem;">
-  <img src='/media/{{product.0.image}}' class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">{{product.0.product_name}}</h5>
-    <p class="card-text">{{product.0.desc}}</p>
-    <button  id="pr{{product.0.id}}"class="btn btn-primary cart">add to cart</button>
-  </div>
-</div>
-</div>
- {% for i in product|slice:"1:" %}
+ 
+ {% for i in product%}
   <div class="col-xs-3 col-sm-3 col-md-3">
   <div class="card" style="width: 18rem;">
   <img src='/media/{{i.image}}' class="card-img-top" alt="...">
   <div class="card-body">
-    <h5 class="card-title">{{i.product_name}}</h5>
+    <h5 class="card-title">{{i.product_name}} <br><h6>Price :{{i.price}}</h6>
     <p class="card-text">{{i.desc}}</p>
+    <span id="divpr{{i.id}}" class="divpr">
     <button id="pr{{i.id}}" class="btn btn-primary cart">add to cart</button>
+    </span>
+   <a href="/shop/prodView/{{i.id}}"> <button id="qv{{i.id}}" class="btn btn-primary cart">quick view</button></a>
   </div>
 </div>
 </div>
-{% if  forloop.counter|divisibleby:3  and not forloop.last %}
+{% if  forloop.counter|divisibleby:4  and not forloop.last %}
 </div><div class="carousel-item">
   
 {% endif %}
@@ -120,13 +114,16 @@ body .no-padding{
     cart = {};
   } else {
     cart = JSON.parse(localStorage.getItem('cart'));
+    document.getElementById('cart').innerHTML=Object.keys(cart).length;
+     update(cart);
   }
-
+  function found(){
+   console.log("hello");
+  }
   // Wait for DOM to be ready
   $(document).ready(function() {
     $('.cart').click(function() {
       console.log('clicked');
-      
       var idstr = this.id.toString();
       console.log(idstr);
       
@@ -135,11 +132,44 @@ body .no-padding{
       } else {
         cart[idstr] = 1;
       }
-
+      update(cart);
       console.log(cart);
       localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cart').innerHTML=Object.keys(cart).length;
     });
   });
+
+  function update(cart){
+    for(var item in cart){
+     document.getElementById('div'+item).innerHTML =
+  "<button id='minus" + item + "' class='btn btn-primary minus'>-</button> " +
+  "<span id='val" + item + "'>" + cart[item] + "</span> " +
+  "<button id='plus" + item + "' class='btn btn-primary plus'>+</button>";
+
+
+    }
+  }
+  $(".divpr").on("click","button.minus",function(){
+    console.log("minus is clicked");
+    a=this.id.slice(7,)
+    cart["pr"+a]=cart["pr"+a]-1;
+     cart["pr"+a]=Math.max(0,cart["pr"+a]);
+    document.getElementById("valpr"+a).innerHTML=cart["pr"+a];
+    update(cart);
+  })
+  $(".divpr").on("click","button.plus",function(){
+    console.log("plus is clicked");
+     a=this.id.slice(6,)
+     cart["pr"+a]=cart["pr"+a]+1;
+       document.getElementById("valpr"+a).innerHTML=cart["pr"+a];
+    update(cart);
+  })
+  
+ $("#spanclear").on("click","button.clear",function(){
+    console.log("clear is clicked");
+    localStorage.clear();
+  })
+
 </script>
 
 {% endblock %}

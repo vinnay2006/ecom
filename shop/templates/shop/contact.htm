@@ -1,0 +1,35 @@
+{% extends 'shop/basic.htm' %}
+{% block title %} contact-us {% endblock %}
+{% block body %}
+ 
+  <div class="container">
+    
+    <div class="row">
+    <div class="col-md-4 my-4">
+    <h2>Contact Us</h2>
+    <div class="contact-info">
+      <h2>Our Office</h2>
+      <p><strong>Address:</strong> 123 Main Street, Cityville, Country</p>
+      <p><strong>Phone:</strong> +1 234 567 890</p>
+      <p><strong>Email:</strong> contact@example.com</p>
+    </div>
+    </div>
+    <div class="col-md-8">
+    <div class="contact-form my-2">
+      <h2>Send a Message</h2>
+      <form action="/shop/contact/" method="post" >
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Your Name" required  width="300px"/><br>
+        <input type="email" name="email" placeholder="Your Email" required /><br>
+        <input type="text" name="subject" placeholder="Subject" /><br>
+        <textarea name="message" rows="6" placeholder="Your Message" required></textarea><br>
+        <button type="submit" class="btn btn-primary">submit</button>
+     
+      </form>
+    </div>
+    </div>
+</div>
+  </div>
+
+
+{% endblock %}
